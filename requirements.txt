@@ -1,0 +1,6 @@
+aiohttp
+sqlalchemy
+asyncpgsa
+alembic
+psycopg2-binary
+

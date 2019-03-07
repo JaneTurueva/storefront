@@ -1,0 +1,6 @@
+coverage!=4.3
+coveralls
+pylama
+pytest
+pytest-cov
+tox
