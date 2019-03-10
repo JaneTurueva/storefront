@@ -2,5 +2,8 @@ coverage!=4.3
 coveralls
 pylama
 pytest
+pytest-aiohttp
 pytest-cov
+sqlalchemy_utils
 tox
+yarl

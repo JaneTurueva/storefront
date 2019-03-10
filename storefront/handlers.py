@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from aiohttp import web
 from aiohttp.web_exceptions import HTTPConflict, HTTPNotFound
 from aiohttp_validate import validate
@@ -25,7 +27,7 @@ class CompaniesView(BaseView):
             "additionalProperties": False
         }
     )
-    async def post(self, data, request):
+    async def post(self, data, request) -> web.Response:
         query = self.TABLE.insert().values(name=data['name']).returning(
             self.TABLE
         )
@@ -34,7 +36,7 @@ class CompaniesView(BaseView):
         except UniqueViolationError:
             raise HTTPConflict()
 
-        return web.Response(body={'data':data})
+        return web.Response(body={'data':data}, status=HTTPStatus.CREATED)
 
     async def get(self):
         query = Company.__table__.select()
@@ -54,6 +56,8 @@ class CompanyView(BaseView):
             self.TABLE.c.company_id == self.company_id
         )
         data = await self.postgres.fetchrow(query)
+        if data is None:
+            raise HTTPNotFound()
         return web.Response(body={'data': data})
 
 
@@ -160,7 +164,7 @@ class ProductsView(BaseView):
             'properties': {
                 'name': {"type": "string"},
                 'employee_id': {"type": "integer"},
-                'price': {"type": "float"}
+                'price': {"type": "number"}
             },
             "required": ["name", "employee_id", "price"],
             "additionalProperties": False
@@ -193,10 +197,16 @@ class ProductView(BaseView):
             'properties': {
                 'name': {"type": "string"},
                 'employee_id': {"type": "integer"},
-                'price': {"type": "float"}
+                'price': {"type": "number"}
             },
             "required": ["name", "employee_id", "price"],
             "additionalProperties": False
+        },
+        response_schema={
+            'type': 'object',
+            'data': {'type': 'object'},
+            'required': ['data'],
+            'additionalProperties': False
         }
     )
     async def put(self, data, request):

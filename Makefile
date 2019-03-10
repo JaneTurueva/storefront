@@ -7,8 +7,6 @@ all:
 	@echo "make test	- Run tests"
 	@exit 0
 
-bump:
-	python3 bump.py $(CI_PROJECT_NAME)/version.py
 
 devenv:
 	rm -rf env
@@ -18,11 +16,11 @@ devenv:
 clean:
 	rm -fr *.egg-info .tox dist
 
-sdist: clean bump
+sdist: clean
 	env/bin/python setup.py sdist
 
 build: clean sdist
-	docker build -t frs:latest .
+	docker build -t storefront:latest .
 
 test:
 	env/bin/tox

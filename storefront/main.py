@@ -1,27 +1,30 @@
+from functools import partial
 from types import MappingProxyType
 from typing import Mapping
 
+import os
 from aiohttp import web, PAYLOAD_REGISTRY
-from aiohttp.web_exceptions import HTTPConflict, HTTPNotFound
-from aiohttp_swaggerify import swaggerify
-from aiohttp_validate import validate
-from asyncpg import UniqueViolationError
 from asyncpgsa import PG
 from storefront.handlers import CompaniesView, CompanyView, EmployeesView, \
     EmployeeView, ProductsView, ProductView
 from storefront.payloads import JsonPayload
-from storefront.models import Company, Employee
 
 
-async def setup_db(app):
+MODULE_PATH = os.path.abspath(os.path.dirname(__file__))
+
+
+async def setup_db(db_url: str, app):
     pg = PG()
-    await pg.init('postgresql://api:hackme@0.0.0.0:5432/storefront')
+    await pg.init(db_url)
     app['postgres'] = pg
 
 
-def main():
+def create_app(db_url: str):
     app = web.Application()
-    app.on_startup.append(setup_db)
+
+    setup_db_with_url = partial(setup_db, db_url)
+    app.on_startup.append(setup_db_with_url)
+
     app.router.add_route('*', '/companies', CompaniesView)
     app.router.add_route('*', '/companies/{id}', CompanyView)
     app.router.add_route('*', '/employees', EmployeesView)
@@ -29,5 +32,9 @@ def main():
     app.router.add_route('*', '/products', ProductsView)
     app.router.add_route('*', '/products/{id}', ProductView)
     PAYLOAD_REGISTRY.register(JsonPayload, (Mapping, MappingProxyType))
+    return app
 
+
+def main():
+    app = create_app('postgresql://api:hackme@0.0.0.0:5432/storefront')
     web.run_app(app)
