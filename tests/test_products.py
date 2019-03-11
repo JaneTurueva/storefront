@@ -1,7 +1,7 @@
 from http import HTTPStatus
 
 from sqlalchemy.engine import Connection
-from storefront.models import Company, Employee, Product
+from storefront.models import Company, Product
 
 
 async def test_products_get(app_client, temp_db_conn: Connection):
@@ -11,20 +11,11 @@ async def test_products_get(app_client, temp_db_conn: Connection):
     )
     company = temp_db_conn.execute(query).fetchone()
 
-    # Создаем сотрудника в базе
-    query = Employee.__table__.insert().values(name='Vasy', company_id=company['company_id']).returning(
-        Employee.__table__
-    )
-    employee = temp_db_conn.execute(query).fetchone()
-
     # Создаем продукты в базе
     query = Product.__table__.insert().values([
-        {'name': 'moloko',
-        'employee_id': employee['employee_id'],
-        'price': 1},
-       {'name': 'salo',
-        'employee_id': employee['employee_id'],
-        'price': 5}]).returning(Product.__table__)
+        {'name': 'moloko', 'price': 1},
+        {'name': 'salo', 'price': 5}
+    ]).returning(Product.__table__)
 
     # Сохраняем их в dict по product_id
     products = {
@@ -45,7 +36,6 @@ async def test_products_get(app_client, temp_db_conn: Connection):
     for received_product in data['data']:
         product = products[received_product['product_id']]
         assert product['name'] == received_product['name']
-        assert product['employee_id'] == received_product['employee_id']
         assert float(product['price']) == received_product['price']
 
 
@@ -56,17 +46,9 @@ async def test_products_post(app_client, temp_db_conn):
     )
     company = temp_db_conn.execute(query).fetchone()
 
-    # Создаем сотрудника в базе
-    query = Employee.__table__.insert().values(name='Vasy', company_id=company['company_id']).returning(
-        Employee.__table__
-    )
-    employee = temp_db_conn.execute(query).fetchone()
-
     # Создаем продукт через API
     resp = await app_client.post('/products', data={
-        'name': 'moloko',
-        'employee_id': employee['employee_id'],
-        'price': 5
+        'name': 'moloko', 'price': 5
     })
 
     # Проверяем ответ
@@ -76,5 +58,4 @@ async def test_products_post(app_client, temp_db_conn):
     assert 'data' in data
     assert isinstance(data['data'], dict)
     assert data['data']['name'] == 'moloko'
-    assert data['data']['employee_id'] == employee['employee_id']
     assert data['data']['price'] == 5.

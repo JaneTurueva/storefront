@@ -5,8 +5,7 @@ from typing import Mapping
 import os
 from aiohttp import web, PAYLOAD_REGISTRY
 from asyncpgsa import PG
-from storefront.handlers import CompaniesView, CompanyView, EmployeesView, \
-    EmployeeView, ProductsView, ProductView
+from storefront.handlers import HANDLERS
 from storefront.payloads import JsonPayload
 
 
@@ -25,12 +24,9 @@ def create_app(db_url: str):
     setup_db_with_url = partial(setup_db, db_url)
     app.on_startup.append(setup_db_with_url)
 
-    app.router.add_route('*', '/companies', CompaniesView)
-    app.router.add_route('*', '/companies/{id}', CompanyView)
-    app.router.add_route('*', '/employees', EmployeesView)
-    app.router.add_route('*', '/employees/{id}', EmployeeView)
-    app.router.add_route('*', '/products', ProductsView)
-    app.router.add_route('*', '/products/{id}', ProductView)
+    for handler in HANDLERS:
+        app.router.add_route('*', handler.URL_PATH, handler)
+
     PAYLOAD_REGISTRY.register(JsonPayload, (Mapping, MappingProxyType))
     return app
 

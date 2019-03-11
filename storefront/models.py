@@ -58,5 +58,13 @@ class Product(Base):
     product_id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     price = Column(DECIMAL(precision=5, scale=2), nullable=False)
+
+
+class EmployeeProductRelation(Base):
+    __tablename__ = 'employee_product_relations'
     employee_id = Column(Integer, ForeignKey('employees.employee_id'),
-                         nullable=False)
+                         primary_key=True)
+    product_id = Column(Integer, ForeignKey('products.product_id'),
+                        primary_key=True)
+    created_at = None
+    updated_at = None
