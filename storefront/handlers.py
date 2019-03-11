@@ -110,7 +110,7 @@ class EmployeesView(BaseView):
     async def post(self, data, request):
         query = Employee.__table__.insert().values(name=data['name'], company_id=data['company_id']).returning(Employee.__table__)
         data = await self.postgres.fetchrow(query)
-        return web.Response(body={'data': data})
+        return web.Response(body={'data': data}, status=HTTPStatus.CREATED)
 
     async def get(self):
         query = Employee.__table__.select()
@@ -126,6 +126,8 @@ class EmployeeView(BaseView):
     async def get(self) -> web.Response:
         query = Employee.__table__.select().where(Employee.__table__.c.employee_id == self.employee_id)
         data = await self.postgres.fetchrow(query)
+        if data is None:
+            raise HTTPNotFound()
         return web.Response(body={'data': data})
 
     @validate(
@@ -146,6 +148,8 @@ class EmployeeView(BaseView):
             Employee.__table__.c.employee_id == self.employee_id
         ).returning(Employee.__table__)
         data = await self.postgres.fetchrow(query)
+        if data is None:
+            raise HTTPNotFound()
         return web.Response(body={'data': data})
 
     async def delete(self) -> web.Response:
@@ -173,7 +177,7 @@ class ProductsView(BaseView):
     async def post(self, data, request):
         query = Product.__table__.insert().values(data).returning(Product.__table__)
         data = await self.postgres.fetchrow(query)
-        return web.Response(body={'data': data})
+        return web.Response(body={'data': data}, status=HTTPStatus.CREATED)
 
     async def get(self):
         query = Product.__table__.select()
@@ -189,6 +193,8 @@ class ProductView(BaseView):
     async def get(self):
         query = Product.__table__.select().where(Product.__table__.c.product_id == self.product_id)
         data = await self.postgres.fetchrow(query)
+        if data is None:
+            raise HTTPNotFound()
         return web.Response(body={'data':data})
 
     @validate(
@@ -212,6 +218,8 @@ class ProductView(BaseView):
     async def put(self, data, request):
         query = Product.__table__.update().values(data).where(Product.__table__.c.product_id == self.product_id).returning(Product.__table__)
         data = await self.postgres.fetchrow(query)
+        if data is None:
+            raise HTTPNotFound()
         return web.Response(body={'data': data})
 
     async def delete(self):
