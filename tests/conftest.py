@@ -1,3 +1,4 @@
+import aioredis
 import pytest
 from alembic.command import upgrade as upgrade_command
 from sqlalchemy import create_engine
@@ -22,8 +23,17 @@ def temp_db_conn(temp_db):
 
 
 @pytest.fixture()
+async def redis_client():
+    redis = await aioredis.create_redis('redis://localhost')
+    yield redis
+
+
+@pytest.fixture()
 def app(temp_db: str):
-    app = create_app(temp_db)
+    app = create_app(
+        db_url=temp_db,
+        redis_url='redis://localhost'
+    )
     yield app
 
 

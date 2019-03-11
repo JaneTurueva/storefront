@@ -1,10 +1,16 @@
 from http import HTTPStatus
 
 from sqlalchemy.engine import Connection
+
+from storefront.handlers import CompaniesView
 from storefront.models import Company
 
 
-async def test_companies_get(app_client, temp_db_conn: Connection):
+async def test_companies_get(app_client, temp_db_conn: Connection,
+                             redis_client):
+    # Очистить кэш
+    await redis_client.execute('del', CompaniesView.CACHE_KEY)
+
     # Создаем несколько компаний в базе
     companies = [{'name': 'test one'}, {'name': 'test two'}]
     query = Company.__table__.insert().values(companies).returning(
