@@ -12,3 +12,10 @@ services:
       POSTGRES_USER: api
       POSTGRES_PASS: hackme
       POSTGRES_DB: storefront
+  redis:
+    restart: always
+    image: redis
+    expose:
+      - 6379
+    ports:
+      - 6379:6379

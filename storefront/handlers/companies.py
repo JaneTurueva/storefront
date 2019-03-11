@@ -1,3 +1,4 @@
+import json
 from http import HTTPStatus
 
 from aiohttp.web_exceptions import HTTPConflict, HTTPNotFound
@@ -7,11 +8,15 @@ from asyncpg import UniqueViolationError
 
 from storefront.handlers.base import BaseView
 from storefront.models import Company
+from storefront.payloads import convert
 
 
 class CompaniesView(BaseView):
     URL_PATH = '/companies'
     TABLE = Company.__table__
+
+    CACHE_KEY = 'companies-cache'
+    CACHE_SECONDS = 60
 
     @validate(
         request_schema={
@@ -35,8 +40,23 @@ class CompaniesView(BaseView):
         return Response(body={'data':data}, status=HTTPStatus.CREATED)
 
     async def get(self) -> Response:
-        query = Company.__table__.select()
-        data = await self.postgres.fetch(query)
+        cached = await self.redis.get(self.CACHE_KEY)
+
+        if cached is not None:
+            # Есть данные в кэше
+            data = json.loads(cached)
+        else:
+            # Нет данных в кэше, нужно обновить
+            query = Company.__table__.select()
+            data = await self.postgres.fetch(query)
+
+            cached = json.dumps(data, default=convert)
+            await self.redis.setex(
+                self.CACHE_KEY,
+                self.CACHE_SECONDS * 1000,
+                cached
+            )
+
         return Response(body={'data': data})
 
 

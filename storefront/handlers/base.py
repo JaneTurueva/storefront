@@ -8,3 +8,7 @@ class BaseView(View):
     @property
     def postgres(self) -> PG:
         return self.request.app['postgres']
+
+    @property
+    def redis(self):
+        return self.request.app['redis']

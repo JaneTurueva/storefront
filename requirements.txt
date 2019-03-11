@@ -1,5 +1,6 @@
 aiohttp
 aiohttp-validate
+aioredis
 sqlalchemy
 asyncpgsa
 alembic
