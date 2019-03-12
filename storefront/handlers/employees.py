@@ -17,11 +17,11 @@ class EmployeesView(BaseView):
         request_schema={
             'type': 'object',
             'properties': {
-                'name': {"type": "string"},
-                'company_id': {"type": "integer"}
+                'name': {'type': 'string'},
+                'company_id': {'type': 'integer'}
             },
-            "required": ["name", "company_id"],
-            "additionalProperties": False
+            'required': ['name', 'company_id'],
+            'additionalProperties': False
         }
     )
     async def post(self, data, request) -> Response:
@@ -57,11 +57,11 @@ class EmployeeView(BaseView):
         request_schema={
             'type': 'object',
             'properties': {
-                'name': {"type": "string"},
-                'company_id': {"type": "integer"}
+                'name': {'type': 'string'},
+                'company_id': {'type': 'integer'}
             },
-            "required": ["name", "company_id"],
-            "additionalProperties": False
+            'required': ['name', 'company_id'],
+            'additionalProperties': False
         }
     )
     async def put(self, data, request) -> Response:
@@ -97,10 +97,10 @@ class EmployeeProductsView(BaseView):
         request_schema={
             'type': 'object',
             'properties': {
-                'product_id': {"type": "integer"}
+                'product_id': {'type': 'integer'}
             },
-            "required": ["product_id"],
-            "additionalProperties": False
+            'required': ['product_id'],
+            'additionalProperties': False
         }
     )
     async def post(self, data, request) -> Response:

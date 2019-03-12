@@ -15,11 +15,11 @@ class ProductsView(BaseView):
         request_schema={
             'type': 'object',
             'properties': {
-                'name': {"type": "string"},
-                'price': {"type": "number"}
+                'name': {'type': 'string'},
+                'price': {'type': 'number'}
             },
-            "required": ["name", "price"],
-            "additionalProperties": False
+            'required': ['name', 'price'],
+            'additionalProperties': False
         }
     )
     async def post(self, data, request) -> Response:
@@ -56,11 +56,11 @@ class ProductView(BaseView):
         request_schema={
             'type': 'object',
             'properties': {
-                'name': {"type": "string"},
-                'price': {"type": "number"}
+                'name': {'type': 'string'},
+                'price': {'type': 'number'}
             },
-            "required": ["name", "price"],
-            "additionalProperties": False
+            'required': ['name', 'price'],
+            'additionalProperties': False
         },
         response_schema={
             'type': 'object',

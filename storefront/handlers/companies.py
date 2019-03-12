@@ -22,10 +22,10 @@ class CompaniesView(BaseView):
         request_schema={
             'type': 'object',
             'properties': {
-                'name': {"type": "string"},
+                'name': {'type': 'string'},
             },
-            "required": ["name"],
-            "additionalProperties": False
+            'required': ['name'],
+            'additionalProperties': False
         }
     )
     async def post(self, data, request) -> Response:
@@ -81,10 +81,10 @@ class CompanyView(BaseView):
         request_schema={
             'type': 'object',
             'properties': {
-                'name': {"type": "string"},
+                'name': {'type': 'string'},
             },
-            "required": ["name"],
-            "additionalProperties": False
+            'required': ['name'],
+            'additionalProperties': False
         }
     )
     async def put(self, data, request) -> Response:

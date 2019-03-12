@@ -11,13 +11,13 @@ COMPANIES_LIST_RESPONSE_SCHEMA = {
                     'created_at': {'type': 'string', 'format': 'date-time'},
                     'updated_at': {'type': 'string', 'format': 'date-time'},
                 },
-                'required': ["company_id", 'name', 'created_at', 'updated_at'],
-                "additionalProperties": False
+                'required': ['company_id', 'name', 'created_at', 'updated_at'],
+                'additionalProperties': False
             }
         }
     },
     'required': ['data'],
-    "additionalProperties": False
+    'additionalProperties': False
 }
 
 
@@ -32,12 +32,12 @@ COMPANY_RESPONSE_SCHEMA = {
                 'created_at': {'type': 'string', 'format': 'date-time'},
                 'updated_at': {'type': 'string', 'format': 'date-time'},
             },
-            'required': ["company_id", 'name', 'created_at', 'updated_at'],
-            "additionalProperties": False
+            'required': ['company_id', 'name', 'created_at', 'updated_at'],
+            'additionalProperties': False
         }
     },
     'required': ['data'],
-    "additionalProperties": False
+    'additionalProperties': False
 }
 
 
@@ -56,15 +56,15 @@ EMPLOYEES_LIST_RESPONSE_SCHEMA = {
                     'updated_at': {'type': 'string', 'format': 'date-time'},
                 },
                 'required': [
-                    "employee_id", "company_id", 'name', 'created_at',
+                    'employee_id', 'company_id', 'name', 'created_at',
                     'updated_at'
                 ],
-                "additionalProperties": False
+                'additionalProperties': False
             }
         }
     },
     'required': ['data'],
-    "additionalProperties": False
+    'additionalProperties': False
 }
 
 
@@ -81,13 +81,13 @@ EMPLOYEE_RESPONSE_SCHEMA = {
                 'updated_at': {'type': 'string', 'format': 'date-time'},
             },
             'required': [
-                "employee_id", "company_id", 'name', 'created_at', 'updated_at'
+                'employee_id', 'company_id', 'name', 'created_at', 'updated_at'
             ],
-            "additionalProperties": False
+            'additionalProperties': False
         }
     },
     'required': ['data'],
-    "additionalProperties": False
+    'additionalProperties': False
 }
 
 
@@ -106,14 +106,14 @@ PRODUCTS_LIST_RESPONSE_SCHEMA = {
                     'updated_at': {'type': 'string', 'format': 'date-time'},
                 },
                 'required': [
-                    "product_id", "price", 'name', 'created_at', 'updated_at'
+                    'product_id', 'price', 'name', 'created_at', 'updated_at'
                 ],
-                "additionalProperties": False
+                'additionalProperties': False
             }
         }
     },
     'required': ['data'],
-    "additionalProperties": False
+    'additionalProperties': False
 }
 
 
@@ -130,11 +130,11 @@ PRODUCT_RESPONSE_SCHEMA = {
                 'updated_at': {'type': 'string', 'format': 'date-time'},
             },
             'required': [
-                "product_id", "price", 'name', 'created_at', 'updated_at'
+                'product_id', 'price', 'name', 'created_at', 'updated_at'
             ],
-            "additionalProperties": False
+            'additionalProperties': False
         }
     },
     'required': ['data'],
-    "additionalProperties": False
+    'additionalProperties': False
 }
