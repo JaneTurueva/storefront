@@ -23,4 +23,4 @@ build: clean sdist
 	docker build -t storefront:latest .
 
 test:
-	env/bin/tox
+	py.test -v --pylama --cov=storefront
