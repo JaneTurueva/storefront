@@ -12,7 +12,7 @@ from yarl import URL
 @contextmanager
 def database(url: str):
     """
-    Создает временнудю базу данных во время вызовы контекст-менеджера и
+    Создает временнудю базу данных во время вызова контекст-менеджера и
     удаляет при выходе из него.
     """
     tmp_db_name = '.'.join([uuid.uuid4().hex, 'storefront-ci'])
@@ -27,6 +27,10 @@ def database(url: str):
 
 
 def get_alembic_config(db_url: str) -> Config:
+    """
+    Создает объект конфигурации alembic, чтобы программно вызывать команды
+    alembic
+    """
     cmd_options = SimpleNamespace(
         config=os.path.join(MODULE_PATH, 'alembic.ini'),
         db_url=db_url,
