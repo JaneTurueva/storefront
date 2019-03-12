@@ -11,16 +11,16 @@ API витрины магазина. Позволяет наполнять ви�
 
    # Смигрировать базу данных
    docker run -it \
-      --env STOREFRONT_DB_URL=... \
-      storefront:latest
+      --env STOREFRONT_DB_URL=postgresql://api:hackme@HOST:5432/storefront \
+      storefront:latest \
       storefront-db upgrade head
 
    # Запустить контейнер
-   docker run --detached \
+   docker run -d -p8080:8080 \
       --env STOREFRONT_HOST=0.0.0.0 \
       --env STOREFRONT_PORT=8080 \
-      --env STOREFRONT_DB_URL=... \
-      --env STOREFRONT_REDIS_URL=... \
+      --env STOREFRONT_DB_URL=postgresql://api:hackme@${DB_HOST}:5432/storefront \
+      --env STOREFRONT_REDIS_URL=redis://${REDIS_HOST} \
       storefront:latest
 
 
