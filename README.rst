@@ -12,7 +12,7 @@ API витрины магазина. Позволяет наполнять ви�
    # Смигрировать базу данных
    docker run -it \
       --env STOREFRONT_DB_URL=postgresql://api:hackme@HOST:5432/storefront \
-      janeturueva/storefront:latest \
+      janeturueva/storefront \
       storefront-db upgrade head
 
    # Запустить контейнер
@@ -21,7 +21,7 @@ API витрины магазина. Позволяет наполнять ви�
       --env STOREFRONT_PORT=8080 \
       --env STOREFRONT_DB_URL=postgresql://api:hackme@${DB_HOST}:5432/storefront \
       --env STOREFRONT_REDIS_URL=redis://${REDIS_HOST} \
-      janeturueva/storefront:latest
+      janeturueva/storefront
 
 
 Как разрабатывать
