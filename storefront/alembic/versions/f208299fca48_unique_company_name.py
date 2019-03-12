@@ -6,7 +6,6 @@ Create Date: 2019-03-07 17:51:34.619595
 
 """
 from alembic import op
-import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
@@ -17,8 +16,10 @@ depends_on = None
 
 
 def upgrade():
-    op.create_unique_constraint(op.f('uq__companies__name'), 'companies', ['name'])
+    op.create_unique_constraint(op.f('uq__companies__name'), 'companies',
+                                ['name'])
 
 
 def downgrade():
-    op.drop_constraint(op.f('uq__companies__name'), 'companies', type_='unique')
+    op.drop_constraint(op.f('uq__companies__name'), 'companies',
+                       type_='unique')

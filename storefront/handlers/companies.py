@@ -37,7 +37,7 @@ class CompaniesView(BaseView):
         except UniqueViolationError:
             raise HTTPConflict()
 
-        return Response(body={'data':data}, status=HTTPStatus.CREATED)
+        return Response(body={'data': data}, status=HTTPStatus.CREATED)
 
     async def get(self) -> Response:
         cached = await self.redis.get(self.CACHE_KEY)
@@ -77,7 +77,6 @@ class CompanyView(BaseView):
             raise HTTPNotFound()
         return Response(body={'data': data})
 
-
     @validate(
         request_schema={
             'type': 'object',
@@ -109,4 +108,3 @@ class CompanyView(BaseView):
             raise HTTPNotFound()
 
         return Response(status=204)
-

@@ -1,7 +1,7 @@
 """Initial
 
 Revision ID: efc5266c95f5
-Revises: 
+Revises:
 Create Date: 2019-03-07 17:19:21.408141
 
 """
@@ -21,8 +21,10 @@ def upgrade():
         'companies',
         sa.Column('company_id', sa.Integer(), nullable=False),
         sa.Column('name', sa.String(), nullable=False),
-        sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('clock_timestamp()'), nullable=False),
-        sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('clock_timestamp()'), nullable=False),
+        sa.Column('created_at', sa.DateTime(timezone=True), nullable=False,
+                  server_default=sa.text('clock_timestamp()')),
+        sa.Column('updated_at', sa.DateTime(timezone=True), nullable=False,
+                  server_default=sa.text('clock_timestamp()')),
         sa.PrimaryKeyConstraint('company_id', name=op.f('pk__companies'))
     )
     op.create_table(
@@ -30,9 +32,14 @@ def upgrade():
         sa.Column('employee_id', sa.Integer(), nullable=False),
         sa.Column('name', sa.String(), nullable=False),
         sa.Column('company_id', sa.Integer(), nullable=False),
-        sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('clock_timestamp()'), nullable=False),
-        sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('clock_timestamp()'), nullable=False),
-        sa.ForeignKeyConstraint(['company_id'], ['companies.company_id'], name=op.f('fk__employees__company_id__companies')),
+        sa.Column('created_at', sa.DateTime(timezone=True), nullable=False,
+                  server_default=sa.text('clock_timestamp()')),
+        sa.Column('updated_at', sa.DateTime(timezone=True), nullable=False,
+                  server_default=sa.text('clock_timestamp()')),
+        sa.ForeignKeyConstraint(
+            ['company_id'], ['companies.company_id'],
+            name=op.f('fk__employees__company_id__companies')
+        ),
         sa.PrimaryKeyConstraint('employee_id', name=op.f('pk__employees'))
     )
     op.create_table(
@@ -41,9 +48,14 @@ def upgrade():
         sa.Column('name', sa.String(), nullable=False),
         sa.Column('price', sa.DECIMAL(precision=5, scale=2), nullable=False),
         sa.Column('employee_id', sa.Integer(), nullable=False),
-        sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('clock_timestamp()'), nullable=False),
-        sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('clock_timestamp()'), nullable=False),
-        sa.ForeignKeyConstraint(['employee_id'], ['employees.employee_id'], name=op.f('fk__products__employee_id__employees')),
+        sa.Column('created_at', sa.DateTime(timezone=True), nullable=False,
+                  server_default=sa.text('clock_timestamp()')),
+        sa.Column('updated_at', sa.DateTime(timezone=True), nullable=False,
+                  server_default=sa.text('clock_timestamp()')),
+        sa.ForeignKeyConstraint(
+            ['employee_id'], ['employees.employee_id'],
+            name=op.f('fk__products__employee_id__employees')
+        ),
         sa.PrimaryKeyConstraint('product_id', name=op.f('pk__products'))
     )
 
@@ -52,4 +64,3 @@ def downgrade():
     op.drop_table('products')
     op.drop_table('employees')
     op.drop_table('companies')
-

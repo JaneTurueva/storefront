@@ -1,7 +1,10 @@
 from http import HTTPStatus
 
+from jsonschema import validate
 from sqlalchemy.engine import Connection
 from storefront.models import Company, Employee
+from tests.schemas import EMPLOYEES_LIST_RESPONSE_SCHEMA, \
+    EMPLOYEE_RESPONSE_SCHEMA
 
 
 async def test_employees_get(app_client, temp_db_conn: Connection):
@@ -28,9 +31,7 @@ async def test_employees_get(app_client, temp_db_conn: Connection):
 
     assert resp.status == 200
     data = await resp.json()
-    assert isinstance(data, dict)
-    assert 'data' in data
-    assert isinstance(data['data'], list)
+    validate(data, EMPLOYEES_LIST_RESPONSE_SCHEMA)
 
     # Сверяем имя каждого сотрудника и его компанию
     for received_employee in data['data']:
@@ -55,8 +56,6 @@ async def test_employees_post(app_client, temp_db_conn):
     # Проверяем ответ
     assert resp.status == HTTPStatus.CREATED
     data = await resp.json()
-    assert isinstance(data, dict)
-    assert 'data' in data
-    assert isinstance(data['data'], dict)
+    validate(data, EMPLOYEE_RESPONSE_SCHEMA)
     assert data['data']['name'] == 'Robert'
     assert data['data']['company_id'] == company['company_id']

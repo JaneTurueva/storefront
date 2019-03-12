@@ -29,9 +29,11 @@ def convert_datetime(value: datetime):
 def convert_uuid(value: UUID):
     return str(value)
 
+
 @convert.register(Decimal)
 def convert_decimal(value: Decimal):
     return float(value)
+
 
 @convert.register(MappingProxyType)
 def convert_mapping_proxy_type(value: MappingProxyType):
@@ -47,8 +49,3 @@ class JsonPayload(_JsonPayload):
     @staticmethod
     def _dumps(value):
         return json.dumps(value, default=convert)
-
-
-__all__ = (
-    'JsonPayload',
-)

@@ -1,7 +1,9 @@
 from http import HTTPStatus
 
+from jsonschema import validate
 from sqlalchemy.engine import Connection
 from storefront.models import Company, Employee
+from tests.schemas import EMPLOYEE_RESPONSE_SCHEMA
 
 
 async def test_employee_get(app_client, temp_db_conn: Connection):
@@ -24,6 +26,7 @@ async def test_employee_get(app_client, temp_db_conn: Connection):
     data = await resp.json()
 
     # Проверяем полученные данные
+    validate(data, EMPLOYEE_RESPONSE_SCHEMA)
     assert employee['company_id'] == data['data']['company_id']
     assert employee['name'] == data['data']['name']
 
@@ -55,6 +58,7 @@ async def test_employee_put(app_client, temp_db_conn):
     # Проверяем ответ
     assert resp.status == HTTPStatus.OK
     data = await resp.json()
+    validate(data, EMPLOYEE_RESPONSE_SCHEMA)
     assert data['data']['name'] == 'New name'
     assert data['data']['company_id'] == company['company_id']
 

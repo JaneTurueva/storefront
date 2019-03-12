@@ -1,9 +1,13 @@
 from http import HTTPStatus
 
+from jsonschema import validate
 from sqlalchemy.engine import Connection
 
 from storefront.handlers import CompaniesView
 from storefront.models import Company
+from tests.schemas import (
+    COMPANIES_LIST_RESPONSE_SCHEMA, COMPANY_RESPONSE_SCHEMA
+)
 
 
 async def test_companies_get(app_client, temp_db_conn: Connection,
@@ -27,9 +31,7 @@ async def test_companies_get(app_client, temp_db_conn: Connection,
 
     assert resp.status == 200
     data = await resp.json()
-    assert isinstance(data, dict)
-    assert 'data' in data
-    assert isinstance(data['data'], list)
+    validate(data, COMPANIES_LIST_RESPONSE_SCHEMA)
 
     # Сверяем имена каждой полученной компании
     for received_company in data['data']:
@@ -46,7 +48,5 @@ async def test_companies_post(app_client):
     # Проверяем ответ
     assert resp.status == HTTPStatus.CREATED
     data = await resp.json()
-    assert isinstance(data, dict)
-    assert 'data' in data
-    assert isinstance(data['data'], dict)
+    validate(data, COMPANY_RESPONSE_SCHEMA)
     assert data['data']['name'] == 'Example company'

@@ -47,9 +47,8 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'storefront-api = storefront.main:main',
-            'storefront-db = storefront.db:main',
-      ]
+            'storefront-api = storefront.main:main'
+        ]
     },
     packages=find_packages(exclude=['tests']),
     install_requires=load_requirements('requirements.txt'),

@@ -4,7 +4,7 @@ from aiohttp.web_exceptions import HTTPNotFound, HTTPConflict, HTTPBadRequest
 from aiohttp.web_response import Response
 from aiohttp_validate import validate
 from asyncpg import UniqueViolationError, ForeignKeyViolationError
-from sqlalchemy import select, and_
+from sqlalchemy import select
 
 from storefront.handlers.base import BaseView
 from storefront.models import Employee, EmployeeProductRelation, Product
@@ -12,6 +12,7 @@ from storefront.models import Employee, EmployeeProductRelation, Product
 
 class EmployeesView(BaseView):
     URL_PATH = '/employees'
+
     @validate(
         request_schema={
             'type': 'object',
@@ -24,7 +25,9 @@ class EmployeesView(BaseView):
         }
     )
     async def post(self, data, request) -> Response:
-        query = Employee.__table__.insert().values(name=data['name'], company_id=data['company_id']).returning(Employee.__table__)
+        query = Employee.__table__.insert().values(
+            name=data['name'], company_id=data['company_id']
+        ).returning(Employee.__table__)
         data = await self.postgres.fetchrow(query)
         return Response(body={'data': data}, status=HTTPStatus.CREATED)
 
@@ -42,7 +45,9 @@ class EmployeeView(BaseView):
         return int(self.request.match_info['id'])
 
     async def get(self) -> Response:
-        query = Employee.__table__.select().where(Employee.__table__.c.employee_id == self.employee_id)
+        query = Employee.__table__.select().where(
+            Employee.__table__.c.employee_id == self.employee_id
+        )
         data = await self.postgres.fetchrow(query)
         if data is None:
             raise HTTPNotFound()
@@ -72,16 +77,17 @@ class EmployeeView(BaseView):
 
     async def delete(self) -> Response:
         query = Employee.__table__.delete().where(
-            Employee.__table__.c.employee_id == self.employee_id).returning(Employee.__table__)
+            Employee.__table__.c.employee_id == self.employee_id
+        ).returning(Employee.__table__)
         data = await self.postgres.fetchrow(query)
         if data is None:
             raise HTTPNotFound()
         return Response(status=204)
 
 
-
 class EmployeeProductsView(BaseView):
     URL_PATH = '/employees/{employee_id}/products'
+    TABLE = EmployeeProductRelation.__table__
 
     @property
     def employee_id(self) -> int:
@@ -100,7 +106,7 @@ class EmployeeProductsView(BaseView):
     async def post(self, data, request) -> Response:
         async with self.postgres.transaction() as conn:
             try:
-                query = EmployeeProductRelation.__table__.insert().values(
+                query = self.TABLE.insert().values(
                     employee_id=self.employee_id,
                     product_id=data['product_id']
                 )
@@ -121,12 +127,12 @@ class EmployeeProductsView(BaseView):
 
     async def get(self) -> Response:
         query = select(Product.__table__.columns).select_from(
-            EmployeeProductRelation.__table__.join(
+            self.TABLE.join(
                 Product.__table__,
-                EmployeeProductRelation.__table__.c.product_id == Product.__table__.c.product_id
+                self.TABLE.c.product_id == Product.__table__.c.product_id
             )
         ).where(
-            EmployeeProductRelation.__table__.c.employee_id == self.employee_id
+            self.TABLE.c.employee_id == self.employee_id
         )
         data = await self.postgres.fetch(query)
         return Response(body={'data': data})

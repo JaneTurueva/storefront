@@ -23,6 +23,7 @@ async def setup_db(db_url: str, app: web.Application):
 async def setup_redis(redis_url, app: web.Application):
     app['redis'] = await aioredis.create_redis(redis_url)
 
+
 def create_app(*, db_url: str, redis_url: str):
     app = web.Application()
 

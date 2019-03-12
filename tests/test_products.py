@@ -1,16 +1,14 @@
 from http import HTTPStatus
 
+from jsonschema import validate
 from sqlalchemy.engine import Connection
-from storefront.models import Company, Product
+from storefront.models import Product
+from tests.schemas import (
+    PRODUCTS_LIST_RESPONSE_SCHEMA, PRODUCT_RESPONSE_SCHEMA
+)
 
 
 async def test_products_get(app_client, temp_db_conn: Connection):
-    # Создаем компанию
-    query = Company.__table__.insert().values(name='test_company').returning(
-        Company.__table__
-    )
-    company = temp_db_conn.execute(query).fetchone()
-
     # Создаем продукты в базе
     query = Product.__table__.insert().values([
         {'name': 'moloko', 'price': 1},
@@ -28,9 +26,7 @@ async def test_products_get(app_client, temp_db_conn: Connection):
 
     assert resp.status == 200
     data = await resp.json()
-    assert isinstance(data, dict)
-    assert 'data' in data
-    assert isinstance(data['data'], list)
+    validate(data, PRODUCTS_LIST_RESPONSE_SCHEMA)
 
     # Проверяем ответ
     for received_product in data['data']:
@@ -40,12 +36,6 @@ async def test_products_get(app_client, temp_db_conn: Connection):
 
 
 async def test_products_post(app_client, temp_db_conn):
-    # Создаем компанию
-    query = Company.__table__.insert().values(name='test_company').returning(
-        Company.__table__
-    )
-    company = temp_db_conn.execute(query).fetchone()
-
     # Создаем продукт через API
     resp = await app_client.post('/products', data={
         'name': 'moloko', 'price': 5
@@ -54,8 +44,6 @@ async def test_products_post(app_client, temp_db_conn):
     # Проверяем ответ
     assert resp.status == HTTPStatus.CREATED
     data = await resp.json()
-    assert isinstance(data, dict)
-    assert 'data' in data
-    assert isinstance(data['data'], dict)
+    validate(data, PRODUCT_RESPONSE_SCHEMA)
     assert data['data']['name'] == 'moloko'
     assert data['data']['price'] == 5.

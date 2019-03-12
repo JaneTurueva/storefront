@@ -50,7 +50,7 @@ class ProductView(BaseView):
 
         if data is None:
             raise HTTPNotFound()
-        return Response(body={'data':data})
+        return Response(body={'data': data})
 
     @validate(
         request_schema={
@@ -90,4 +90,3 @@ class ProductView(BaseView):
             raise HTTPNotFound()
 
         return Response(status=204)
-

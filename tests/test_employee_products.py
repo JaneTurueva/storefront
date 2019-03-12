@@ -1,8 +1,12 @@
 from http import HTTPStatus
 
+from jsonschema import validate
 from sqlalchemy.engine import Connection
 from storefront.models import (
     Company, Employee, Product, EmployeeProductRelation
+)
+from tests.schemas import (
+    PRODUCTS_LIST_RESPONSE_SCHEMA, PRODUCT_RESPONSE_SCHEMA
 )
 
 
@@ -33,13 +37,13 @@ async def test_employee_products_get(app_client, temp_db_conn: Connection):
     temp_db_conn.execute(query).fetchone()
 
     # Получаем сотрудника через API
-    resp = await app_client.get('/employees/%d/products' % employee['employee_id'])
+    resp = await app_client.get(
+        '/employees/%d/products' % employee['employee_id']
+    )
     assert resp.status == HTTPStatus.OK
 
     data = await resp.json()
-    assert isinstance(data, dict)
-    assert 'data' in data
-    assert isinstance(data['data'], list)
+    validate(data, PRODUCTS_LIST_RESPONSE_SCHEMA)
     assert len(data['data']) == 1
 
     # Проверяем полученные данные
@@ -75,9 +79,7 @@ async def test_employee_products_post(app_client, temp_db_conn: Connection):
     assert resp.status == HTTPStatus.CREATED
 
     data = await resp.json()
-    assert isinstance(data, dict)
-    assert 'data' in data
-    assert isinstance(data['data'], dict)
+    validate(data, PRODUCT_RESPONSE_SCHEMA)
 
     # Проверяем полученные данные
     assert product['product_id'] == data['data']['product_id']

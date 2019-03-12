@@ -1,7 +1,6 @@
 from sqlalchemy import (
-    MetaData, DateTime, Column, text, Integer, String,
-    ForeignKey,
-    DECIMAL)
+    MetaData, DateTime, Column, text, Integer, String, ForeignKey, DECIMAL
+)
 from sqlalchemy.ext.declarative import as_declarative, declared_attr
 
 
