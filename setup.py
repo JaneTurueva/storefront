@@ -47,10 +47,14 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'storefront-api = storefront.main:main'
+            'storefront-api = storefront.main:main',
+            'storefront-db = storefront.db:main'
         ]
     },
     packages=find_packages(exclude=['tests']),
+    package_data={
+        'storefront': ['alembic.ini']
+    },
     install_requires=load_requirements('requirements.txt'),
     python_requires=">3.5.*, <4",
     extras_require={

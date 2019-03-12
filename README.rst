@@ -10,8 +10,10 @@ API витрины магазина. Позволяет наполнять ви�
 .. code-block:: shell
 
    # Смигрировать базу данных
-   cd storefront
-   alembic upgrade head
+   docker run -it \
+      --env STOREFRONT_DB_URL=... \
+      storefront:latest
+      storefront-db upgrade head
 
    # Запустить контейнер
    docker run --detached \
@@ -35,6 +37,9 @@ API витрины магазина. Позволяет наполнять ви�
 
    # Активировать виртуальное окружение
    source env/bin/activate
+
+   # Смигрировать базу данных
+   storefront-db upgrade head
 
    # Создать докер image
    make build

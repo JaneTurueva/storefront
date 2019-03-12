@@ -19,13 +19,17 @@ MODULE_PATH = os.path.abspath(os.path.dirname(__file__))
 print(os.getenv('STOREFRONT_PORT', 8080))
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--host', type=str, help='Listen host',
+parser.add_argument('--host', type=str,
+                    help='Host to listen [env: STOREFRONT_HOST]',
                     default=os.getenv('STOREFRONT_HOST', '0.0.0.0'))
-parser.add_argument('--port', type=int, help='Listen port',
+parser.add_argument('--port', type=int,
+                    help='Port to listen [env: STOREFRONT_PORT]',
                     default=os.getenv('STOREFRONT_PORT', 8080))
-parser.add_argument('--db-url', type=str, help='Database url',
+parser.add_argument('--db-url', type=str,
+                    help='Database URL [env: STOREFRONT_DB_URL]',
                     default=os.getenv('STOREFRONT_DB_URL'))
-parser.add_argument('--redis-url', type=str, help='Redis url',
+parser.add_argument('--redis-url', type=str,
+                    help='Redis URL [env: STOREFRONT_REDIS_URL]',
                     default=os.getenv('STOREFRONT_REDIS_URL'))
 
 
