@@ -1,4 +1,5 @@
-CI_PROJECT_NAME ?= $(shell python3 setup.py --name)
+PROJECT_NAME ?= $(shell python3 setup.py --name)
+PROJECT_VERSION ?= $(shell python3 setup.py --version)
 
 all:
 	@echo "make devenv	- Configure dev environment"
@@ -20,7 +21,13 @@ sdist: clean
 	env/bin/python setup.py sdist
 
 build: clean sdist
-	docker build -t storefront:latest .
+	docker build \
+	  -t janeturueva/${PROJECT_NAME}:latest \
+	  -t janeturueva/${PROJECT_NAME}:${PROJECT_VERSION} .
+
+upload: build
+	docker push janeturueva/${PROJECT_NAME}:latest
+	docker push janeturueva/${PROJECT_NAME}:${PROJECT_VERSION}
 
 test:
 	py.test -v --pylama --cov=storefront
