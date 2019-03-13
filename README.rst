@@ -393,8 +393,8 @@ jsonschema (не в handlers, чтобы не тратить лишнее вре
 
 .. code-block:: shell
 
-   export DB_URL=postgresql://api:hackme@0.0.0.0:5432/storefront
-   export REDIS_URL=redis://localhost
+   export CI_DB_URL=postgresql://api:hackme@0.0.0.0:5432/storefront
+   export CI_REDIS_URL=redis://localhost
    
    # Будет запущен py.test, pylama
    make test
