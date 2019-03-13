@@ -1,10 +1,10 @@
 import json
 from http import HTTPStatus
 
-from aiohttp.web_exceptions import HTTPConflict, HTTPNotFound
+from aiohttp.web_exceptions import HTTPConflict, HTTPNotFound, HTTPBadRequest
 from aiohttp.web_response import Response
 from aiohttp_validate import validate
-from asyncpg import UniqueViolationError
+from asyncpg import UniqueViolationError, ForeignKeyViolationError
 
 from storefront.handlers.base import BaseView
 from storefront.models import Company
@@ -100,11 +100,18 @@ class CompanyView(BaseView):
         return Response(body={'data': data})
 
     async def delete(self) -> Response:
-        query = self.TABLE.delete().where(
-            self.TABLE.c.company_id == self.company_id
-        ).returning(self.TABLE)
-        data = await self.postgres.fetchrow(query)
-        if data is None:
-            raise HTTPNotFound()
+        try:
+            query = self.TABLE.delete().where(
+                self.TABLE.c.company_id == self.company_id
+            ).returning(self.TABLE)
+
+            data = await self.postgres.fetchrow(query)
+            if data is None:
+                raise HTTPNotFound()
+
+        except ForeignKeyViolationError:
+            raise HTTPBadRequest(
+                text='Company has employees and can not be deleted'
+            )
 
         return Response(status=204)
