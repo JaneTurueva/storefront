@@ -24,6 +24,90 @@ API витрины магазина. Позволяет наполнять ви�
       janeturueva/storefront
 
 
+Как использовать
+----------------
+
+**Создать компанию**
+
+.. code-block:: shell
+
+   curl --header "Content-Type: application/json" --request POST \
+      --data '{"name":"ООО Рога и Копыта"}' \
+      http://localhost:8080/companies
+   
+.. code-block:: json
+
+   {
+      "data": {
+         "company_id": 1,
+         "name": "ООО Рога и Копыта",
+         "created_at": "2019-03-13T20:11:58.150475+00:00",
+         "updated_at": "2019-03-13T20:11:58.150483+00:00"
+      }
+   }
+     
+
+**Добавить сотрудника компании**
+
+.. code-block:: shell
+
+   curl --header "Content-Type: application/json" --request POST \
+      --data '{"name":"Василий Пупкин", "company_id": 1}' \
+      http://localhost:8080/employees
+
+.. code-block:: json
+   
+   {
+      "data": {
+         "employee_id": 1,
+         "name": "Василий Пупкин 1 ",
+         "company_id": 1,
+         "created_at": "2019-03-13T20:15:03.125603+00:00",
+         "updated_at": "2019-03-13T20:15:03.125611+00:00"
+      }
+   }
+   
+   
+**Добавить товар на витрину**
+
+.. code-block:: shell
+   
+   curl --header "Content-Type: application/json" --request POST \
+      --data '{"name":"Молоко", "price": 10.00}' \
+      http://localhost:8080/products
+      
+.. code-block:: json
+
+   {
+      "data": {
+         "product_id": 1,
+         "name": "Молоко",
+         "price": 10,
+         "created_at": "2019-03-13T20:17:20.869164+00:00",
+         "updated_at": "2019-03-13T20:17:20.869171+00:00"
+      }
+   }
+
+**Добавить ответственного сотрудника на товар**
+
+.. code-block:: shell
+
+   curl --header "Content-Type: application/json" --request POST \
+         --data '{"product_id": 1}' \
+         http://localhost:8080/employees/1/products
+
+.. code-block:: json
+
+   {
+      "data": {
+         "created_at": "2019-03-13T20:17:12.226921+00:00",
+         "name": "Молоко",
+         "price": 10.0,
+         "product_id": 1,
+         "updated_at": "2019-03-13T20:17:12.226944+00:00"
+      }
+   }
+
 Как разрабатывать
 -----------------
 .. code-block:: shell
