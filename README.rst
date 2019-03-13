@@ -10,13 +10,13 @@ API витрины магазина. Позволяет наполнять ви�
 .. code-block:: shell
 
    # Смигрировать базу данных
-   docker run -it \
+   docker run -it --rm \
       --env STOREFRONT_DB_URL=postgresql://api:hackme@HOST:5432/storefront \
       janeturueva/storefront \
       storefront-db upgrade head
 
    # Запустить контейнер
-   docker run -d -p8080:8080 \
+   docker run -d --rm -p8080:8080 \
       --env STOREFRONT_HOST=0.0.0.0 \
       --env STOREFRONT_PORT=8080 \
       --env STOREFRONT_DB_URL=postgresql://api:hackme@${DB_HOST}:5432/storefront \
