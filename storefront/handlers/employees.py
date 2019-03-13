@@ -76,12 +76,19 @@ class EmployeeView(BaseView):
         return Response(body={'data': data})
 
     async def delete(self) -> Response:
-        query = Employee.__table__.delete().where(
-            Employee.__table__.c.employee_id == self.employee_id
-        ).returning(Employee.__table__)
-        data = await self.postgres.fetchrow(query)
-        if data is None:
-            raise HTTPNotFound()
+        try:
+            query = Employee.__table__.delete().where(
+                Employee.__table__.c.employee_id == self.employee_id
+            ).returning(Employee.__table__)
+
+            data = await self.postgres.fetchrow(query)
+            if data is None:
+                raise HTTPNotFound()
+
+        except ForeignKeyViolationError:
+            raise HTTPBadRequest(text=('Employee has relations with products '
+                                       'and can not be deleted'))
+
         return Response(status=204)
 
 

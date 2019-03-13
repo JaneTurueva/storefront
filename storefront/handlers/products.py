@@ -1,8 +1,9 @@
 from http import HTTPStatus
 
-from aiohttp.web_exceptions import HTTPNotFound
+from aiohttp.web_exceptions import HTTPNotFound, HTTPBadRequest
 from aiohttp.web_response import Response
 from aiohttp_validate import validate
+from asyncpg import ForeignKeyViolationError
 
 from storefront.handlers.base import BaseView
 from storefront.models import Product
@@ -81,12 +82,16 @@ class ProductView(BaseView):
         return Response(body={'data': data})
 
     async def delete(self) -> Response:
-        query = Product.__table__.delete().where(
-            Product.__table__.c.product_id == self.product_id
-        ).returning(Product.__table__)
-        data = await self.postgres.fetchrow(query)
+        try:
+            query = Product.__table__.delete().where(
+                Product.__table__.c.product_id == self.product_id
+            ).returning(Product.__table__)
+            data = await self.postgres.fetchrow(query)
 
-        if data is None:
-            raise HTTPNotFound()
+            if data is None:
+                raise HTTPNotFound()
+        except ForeignKeyViolationError:
+            raise HTTPBadRequest(text=('Product has relations with employees '
+                                       'and can not be deleted'))
 
         return Response(status=204)
