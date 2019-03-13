@@ -189,6 +189,9 @@ API витрины магазина. Позволяет наполнять ви�
 
    # Активировать виртуальное окружение
    source env/bin/activate
+   
+   # Поднять окружение (postgres и redis)
+   docker-compose up -d
 
    # Смигрировать базу данных
    storefront-db upgrade head
@@ -208,7 +211,8 @@ jsonschema (не в handlers, чтобы не тратить лишнее вре
 
 .. code-block:: shell
 
-   # Запустит py.test, pylama
    export DB_URL=postgresql://api:hackme@0.0.0.0:5432/storefront
    export REDIS_URL=redis://localhost
+   
+   # Будет запущен py.test, pylama
    make test
