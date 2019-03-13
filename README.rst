@@ -52,7 +52,69 @@ API витрины магазина. Позволяет наполнять ви�
          "updated_at": "2019-03-13T20:11:58.150483+00:00"
       }
    }
+   
+**Получить список компаний**
+
+.. code-block:: shell
+
+   curl http://localhost:8080/companies
+   
+.. code-block:: json
+
+   {
+      "data": [
+         {
+            "company_id": 1,
+            "name": "ООО Рога и Копыта",
+            "created_at": "2019-03-13T20:11:58.150475+00:00",
+            "updated_at": "2019-03-13T20:11:58.150483+00:00"
+         }
+      ]
+   }
+   
+   
+**Получить компанию**
+
+.. code-block:: shell
+
+   curl http://localhost:8080/companies/1
+   
+.. code-block:: json
+
+   {
+      "data": {
+         "company_id": 1,
+         "name": "ООО Рога и Копыта",
+         "created_at": "2019-03-13T20:11:58.150475+00:00",
+         "updated_at": "2019-03-13T20:11:58.150483+00:00"
+      }
+   }
     
+**Изменить компанию**
+
+.. code-block:: shell
+
+   curl --header "Content-Type: application/json" --request PUT \
+      --data '{"name":"ООО Рога и Копыта 2"}' \
+      http://localhost:8080/companies/1
+      
+.. code-block:: json
+
+   {
+      "data": {
+         "company_id": 1,
+         "name": "ООО Рога и Копыта 2",
+         "created_at": "2019-03-13T20:11:58.150475+00:00",
+         "updated_at": "2019-03-13T20:44:22.235562+00:00"
+      }
+   }
+
+**Удалить компанию**
+
+.. code-block:: shell
+
+   curl --request=DELETE http://localhost:8080/companies/1
+
 Сотрудники
 ----------
 
