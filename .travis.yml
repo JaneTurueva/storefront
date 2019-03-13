@@ -3,10 +3,7 @@ language: python
 matrix:
   include:
     - python: 3.7-dev
-      env: TOXENV=py37
-env:
-  - CI_DB_URL=postgres://postgres@localhost:5432/travis_ci_test
-  - CI_REDIS_URL=redis://localhost
+      env: TOXENV=py37 CI_DB_URL=postgres://postgres@localhost:5432/travis_ci_test CI_REDIS_URL=redis://localhost
 install:
   - pip install tox coveralls codecov
 script:
