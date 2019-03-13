@@ -30,4 +30,4 @@ upload: build
 	docker push janeturueva/${PROJECT_NAME}:${PROJECT_VERSION}
 
 test:
-	py.test -v --pylama --cov=storefront
+	env/bin/tox

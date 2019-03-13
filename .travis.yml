@@ -1,0 +1,23 @@
+language: python
+
+matrix:
+  include:
+    - python: 3.7-dev
+      env: TOXENV=py37
+install:
+  - pip install tox coveralls codecov
+script:
+  - tox
+after_success:
+  - codecov
+  - coveralls
+
+
+language: python
+python:
+  - "3.7-dev"  # 3.7 development branch
+install:
+  - pip install -r requirements.txt
+  - pip install -r requirements.dev.txt
+script:
+  - pytest
