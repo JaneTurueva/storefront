@@ -3,6 +3,9 @@ Storefront
 
 .. image:: https://travis-ci.org/JaneTurueva/storefront.svg?branch=master
     :target: https://travis-ci.org/JaneTurueva/storefront
+
+.. image:: https://images.microbadger.com/badges/version/janeturueva/storefront.svg
+    :target: https://hub.docker.com/r/janeturueva/storefront
     
 API витрины магазина. Позволяет наполнять витрину магазина товарами, а также
 назначать для товаров ответственных сотрудников.
