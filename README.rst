@@ -7,6 +7,9 @@ Storefront
 .. image:: https://images.microbadger.com/badges/version/janeturueva/storefront.svg
     :target: https://hub.docker.com/r/janeturueva/storefront
     
+.. image:: https://images.microbadger.com/badges/image/janeturueva/storefront.svg
+    :target: https://hub.docker.com/r/janeturueva/storefront
+    
 API витрины магазина. Позволяет наполнять витрину магазина товарами, а также
 назначать для товаров ответственных сотрудников.
 
