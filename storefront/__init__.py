@@ -3,7 +3,7 @@
 __author__ = 'Evgenia Turueva'
 __email__ = 'tindomirel1994@gmail.com'
 __license__ = 'MIT'
-__version__ = '0.0.0'
+__version__ = '0.0.1'
 
 
 __all__ = (
