@@ -1,6 +1,9 @@
 Storefront
 **********
 
+.. image:: https://travis-ci.org/JaneTurueva/storefront.svg?branch=master
+    :target: https://travis-ci.org/JaneTurueva/storefront
+    
 API витрины магазина. Позволяет наполнять витрину магазина товарами, а также
 назначать для товаров ответственных сотрудников.
 
