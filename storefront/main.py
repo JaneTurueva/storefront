@@ -16,7 +16,6 @@ from storefront.payloads import JsonPayload
 
 MODULE_PATH = os.path.abspath(os.path.dirname(__file__))
 
-print(os.getenv('STOREFRONT_PORT', 8080))
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--host', type=str,
